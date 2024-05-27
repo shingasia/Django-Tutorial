@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Post List</title>
+    </head>
+    <body>
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <h2>{{ post.title }}</h2>
+                    <p>{{ post.content }}
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

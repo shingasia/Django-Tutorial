@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    {% comment %} <head>Book 리스트</head> {% endcomment %}
+    <body>
+        <h1>Book의 목록입니다.</h1>
+        {% for book in books %}
+            <div>{{ book }} ({{book.price}} 원)</div>
+        {% endfor %}
+        <hr/>
+        {% comment %} 이스케이프 켜기: html 코드가 그대로 보임 {% endcomment %}
+        {% autoescape on %}
+            {{books2}}
+        {% endautoescape %}
+        <hr/>
+        {% comment %} 이스케이프 끄기: html 코드가 예쁘게 렌더링되어 보임 {% endcomment %}
+        {% autoescape off %}
+            {{books2}}
+        {% endautoescape %}
+        <hr/>
+        {% comment %} 홀수행은 class="li_odd" 짝수행은 class="li_[book_id]" {% endcomment %}
+        <ul>
+            {% for book in books %}
+                <li class={{"li_"}}{% cycle 'odd' book.book_id %}>
+                    {{book}}
+                </li>
+            {% endfor %}
+        </ul>
+        <hr/>
+        {% comment %} firstof는 항목중에서 처음으로 False가 아닌 것 {% endcomment %}
+        {% comment %}
+            {% firstof var1 var2 var3 %}는
+            {% if var1 %}
+                {{ var1 }}
+            {% elif var2 %}
+                {{ var2 }}
+            {% elif var3 %}
+                {{ var3 }}
+            {% endif %} 와 같다.
+        {% endcomment %}
+        {% firstof "" 0.0 'hi' 0x0000 %}
+        <hr/>
+        한줄 주석은 이렇게 쓰면 된다. {# 한줄 주석 #}
+        <hr/>
+        {% if books|length >= 10 %}
+            10개 이상
+        {% elif books|length >= 5 %}
+            5개 이상
+        {% elif books|length >= 1 %}
+            있긴 있음
+        {% else %}
+            없음
+        {% endif %}
+        <hr/>
+    </body>
+</html>
+<!--
+Django의 Built-in tag를 알아보자
+https://medium.com/django-unleashed/mastering-custom-template-tags-in-django-step-by-step-guide-with-real-project-example-4c0184e2bab3
+-->

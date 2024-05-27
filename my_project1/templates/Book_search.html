@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>도서 검색 화면</title>
+    </head>
+    <body>
+        <div>
+            <form method="GET">
+                <input type="text" name="keyword" />
+                <input type="submit" name="검색" />
+            </form>
+        </div>
+        <h1>books의 도서 검색 화면입니다.</h1>
+            {% for book in books %}
+                <div>
+                    {{ book }}
+                    (가격 : {{book.price}}원,
+                    저자 : {{book.author}})
+                </div>
+            {% endfor %}
+    </body>
+</html>

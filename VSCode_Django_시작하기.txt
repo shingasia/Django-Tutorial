@@ -1,0 +1,77 @@
+VSCode에서 PowerShell이 아니라 Bash 로 변경 후 입력
+
+$ python3 -m venv Djangoenv          # Djangoenv 라는 이름으로 가상환경 생성
+$ source Djangoenv/Scripts/activate
+
+Shell 에서 좌측에 내가 입력한 가상환경 이름 (Djangoenv) 가 떳는지 확인
+(Djangoenv) pip install django 로 Django 설치 후 다시 pip list로 패키기 확인
+(Djangoenv) django-admin --version                   # Django 버전 확인
+(Djangoenv) django-admin startproject my_project1    # 프로젝트 생성1
+또는 아래와 같이 프로젝트로 사용할 폴더를 미리 만들고 그 폴더로 들어가서 현재 위치에 프로젝트를 생성하는 명령을 쓰면 된다.
+
+(Djangoenv) mkdir my_project1
+(Djangoenv) cd my_project1
+(Djangoenv) django-admin startproject config .       # .(dot)는 현재 위치를 의미 .(dot)을 생략하면 프로젝트가 한 단계 더 하위 레벨에 생성된다.
+
+(Djangoenv) python manage.py runserver               # 개발용 서버 실행
+
+
+(Djangoenv) python manage.py startapp goods          # 새 application(줄여서 app) 생성
+🔴 프로젝트는 특정 웹 사이트에 대한 구성 및 app의 모음입니다. 한 프로젝트에 여러 개의 app이 포함될 수 있습니다.
+app은 여러 프로젝트에 있을 수 있습니다.
+
+가상환경에 mysqlclient 설치해서 MariaDB와 연결
+(Djangoenv) pip install mysqlclient
+
+🔴 마이그레이션 파일 생성 명령, 마이그레이션은 app 단위로 생성된다.
+(Djangoenv) python manage.py migrate
+(Djangoenv) python manage.py makemigrations goods    # 모델(Model)이 속한 app을 마이그레이션 => 0001_initial.py 라는 마이그레이션 파일이 생성된다.
+(Djangoenv) python manage.py migrate goods           # 마이그레이션 파일을 데이터베이스에 적용
+
+
+🔴 마이그레이션 처음부터 다시 하는 법
+▶ 데이터를 날려도 되는 경우 그냥 데이터베이스 DROP -> CREATE
+mysql> DROP DATABASE `django`;
+mysql> CREATE DATABASE `django`;
+
+▶ __init__.py 파일을 제외하고 migrations 폴더의 내용을 삭제
+$ find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+$ find . -path "*/migrations/*.pyc"  -delete
+
+▶ 삭제 후 다시 마이그레이션
+python manage.py makemigrations
+python manage.py migrate
+
+🔴 Django Admin 기능을 사용하기 위해 관리자 계정 생성
+(Djangoenv) python manage.py createsuperuser
+-------------------------------------------
+username : shingasia
+email : skdskdqld@naver.com
+password : a1s2d3f4g5@
+-------------------------------------------
+
+🔴 python 명령으로 실행한 인터프리터에는 Django 프로젝트의 내용이 포함되어 있지 않다.
+Django 프로젝트의 코드를 포함한 인터프리터를 사용하려면 manage.py를 사용해야 한다. 명령어는 shell이다.
+(Djangoenv) python manage.py shell
+-------------------------------------------
+>>> from goods.models import Book
+>>> import uuid
+>>> Book.objects.all()
+<QuerySet [<Book: CentOS 리눅스 구축 관리 실무>, <Book: TCP/IP 소켓 프로그래밍>]>
+>>> Book.objects.get(book_id=uuid.UUID('122abd3c-4435-4cec-a220-382e70d9caa7'))
+<Book: CentOS 리눅스 구축 관리 실무>
+>>> print([e.name for e in Book.objects.all()])
+['CentOS 리눅스 구축 관리 실무', 'TCP/IP 소켓 프로그래밍']
+-------------------------------------------
+
+🟣 all(), get(), filter() 등으로 데이터 검색이 가능하다. 자세한 검색 방법은 Django의 Field lookups를 참고
+
+
+
+
+
+
+
+
+// https://getemoji.com/
+
